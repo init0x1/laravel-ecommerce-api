@@ -4,9 +4,11 @@ namespace App\Providers;
 
 
 use App\Repositories\Contracts\UserRepositoryInterface;
-
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 
 use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\CategoryRepository;
+
 
 use Illuminate\Support\ServiceProvider;
 
@@ -31,6 +33,6 @@ class RepositoryServiceProvider extends ServiceProvider
 
     public $bindings = [
         UserRepositoryInterface::class => UserRepository::class,
-
+        CategoryRepositoryInterface::class => CategoryRepository::class,
     ];
 }
