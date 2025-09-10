@@ -25,15 +25,14 @@ class StockService
     public function getAllStocks(): LengthAwarePaginator
     {
         return $this->stockRepository
-                    ->applyQuery()
-                    ->paginate();
+            ->applyQuery()
+            ->paginate();
     }
 
     public function getStockById(int $id): ?Stock
     {
         return $this->stockRepository->findById($id);
     }
-
 
     public function updateStock(UpdateStockData $stockData): Stock
     {

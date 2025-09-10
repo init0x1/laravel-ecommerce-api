@@ -2,7 +2,6 @@
 
 namespace App\DTOs\Users;
 
-
 use Illuminate\Http\Request;
 
 class LoginUserData
@@ -21,7 +20,6 @@ class LoginUserData
         );
     }
 
-
     public function toArray(): array
     {
         return [
@@ -29,5 +27,4 @@ class LoginUserData
             'password' => $this->password,
         ];
     }
-
 }

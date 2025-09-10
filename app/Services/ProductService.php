@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 class ProductService
 {
     protected $productRepository;
+
     protected $stockRepository;
 
     public function __construct(
@@ -31,9 +32,9 @@ class ProductService
 
             $product = $this->productRepository->create($productData);
 
-        $stockData = CreateStockData::fromProduct($product, $productData->initial_quantity);
+            $stockData = CreateStockData::fromProduct($product, $productData->initial_quantity);
 
-        $this->stockRepository->create($stockData);
+            $this->stockRepository->create($stockData);
 
             return $product;
         });
@@ -49,9 +50,10 @@ class ProductService
     public function getProductById(int $id): ?Product
     {
         $product = $this->productRepository->findById($id);
-        if(!$product){
+        if (! $product) {
             throw new ModelNotFoundException("Product with ID {$id} not found");
         }
+
         return $product;
     }
 

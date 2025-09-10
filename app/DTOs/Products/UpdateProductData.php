@@ -2,7 +2,6 @@
 
 namespace App\DTOs\Products;
 
-use App\Entities\Models\Product;
 use Illuminate\Http\Request;
 
 class UpdateProductData
@@ -30,7 +29,7 @@ class UpdateProductData
     public function toArray(): array
     {
         return [
-            'id'=> $this->id,
+            'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
             'unit_price' => $this->unit_price,

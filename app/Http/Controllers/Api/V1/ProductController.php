@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Api\BaseApiController;
 use App\DTOs\Products\CreateProductData;
 use App\DTOs\Products\UpdateProductData;
 use App\Entities\Models\Product;
+use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\Api\V1\CreateRequests\ProductCreateRequest;
 use App\Http\Requests\Api\V1\UpdateRequests\ProductUpdateRequest;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ProductController extends BaseApiController
 {
@@ -22,33 +21,32 @@ class ProductController extends BaseApiController
         $this->productService = $productService;
     }
 
-
     public function index(): JsonResponse
     {
         $products = $this->productService->getAllProducts();
+
         return $this->successResponse($products);
     }
-
 
     public function store(ProductCreateRequest $request): JsonResponse
     {
         $product = $this->productService->createProduct(CreateProductData::fromRequest($request));
         $product->load('stock');
+
         return $this->createdResponse($product);
     }
-
 
     public function show(int $id): JsonResponse
     {
         try {
             $product = $this->productService->getProductById($id);
             $product->load('stock');
+
             return $this->successResponse($product);
         } catch (ModelNotFoundException $e) {
             return $this->notFoundResponse($e->getMessage());
         }
     }
-
 
     public function update(ProductUpdateRequest $request): JsonResponse
     {
@@ -56,18 +54,18 @@ class ProductController extends BaseApiController
             $data = UpdateProductData::fromRequest($request);
             $updatedProduct = $this->productService->updateProduct($data);
             $updatedProduct->load('stock');
+
             return $this->successResponse($updatedProduct);
         } catch (ModelNotFoundException $e) {
             return $this->notFoundResponse('Product not found to be updated');
         }
     }
 
-
     public function destroy(Product $product): JsonResponse
     {
         $deleted = $this->productService->deleteProduct($product);
 
-        if (!$deleted) {
+        if (! $deleted) {
             return $this->errorResponse('Failed to delete product', 500);
         }
 

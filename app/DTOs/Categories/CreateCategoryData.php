@@ -19,7 +19,6 @@ class CreateCategoryData
         );
     }
 
-
     public function toArray(): array
     {
         return [
@@ -27,5 +26,4 @@ class CreateCategoryData
             'description' => $this->description,
         ];
     }
-
 }

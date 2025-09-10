@@ -42,7 +42,7 @@ class OrderService
 
             $order = $this->orderRepository->create($orderData);
 
-            //total amount and create order items
+            // total amount and create order items
             $totalAmount = 0;
             $orderItemsData = [];
 
@@ -113,7 +113,6 @@ class OrderService
             if ($order->customer_id !== $userId) {
                 throw new \Exception('Unauthorized: You can only update your own orders');
             }
-
 
             if ($updateData->status && $updateData->status !== OrderStatus::CANCELLED) {
                 throw new \Exception('Customers can only cancel orders');

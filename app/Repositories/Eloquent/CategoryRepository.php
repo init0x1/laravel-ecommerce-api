@@ -2,22 +2,18 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\BaseRepository\BaseRepository;
-use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\DTOs\Categories\CreateCategoryData;
 use App\DTOs\Categories\UpdateCategoryData;
 use App\Entities\Models\Category;
-
-
+use App\Repositories\BaseRepository\BaseRepository;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 
 class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
-
     protected $allowedFilters = [
         'name',
         'description',
     ];
-
 
     protected $allowedFiltersExact = [
         'id',
@@ -42,8 +38,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         'id',
     ];
 
-
-     public function model()
+    public function model()
     {
         return Category::class;
     }
@@ -53,13 +48,12 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         return $this->model->create($data->toArray());
     }
 
-
     public function findById(int $id): ?Category
     {
         return $this->model->find($id);
     }
 
-    public function update( UpdateCategoryData $data): Category
+    public function update(UpdateCategoryData $data): Category
     {
 
         $category = $this->model->findOrFail($data->id);

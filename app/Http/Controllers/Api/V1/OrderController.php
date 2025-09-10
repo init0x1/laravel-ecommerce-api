@@ -56,7 +56,6 @@ class OrderController extends BaseApiController
             $order = $this->orderService->getOrderById($id);
             $user = $request->user();
 
-
             if ($user->role === UserType::CUSTOMER && $order->customer_id !== $user->id) {
                 return $this->errorResponse('Unauthorized: You can only view your own orders', 403);
             }

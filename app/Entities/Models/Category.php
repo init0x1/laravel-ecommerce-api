@@ -2,21 +2,22 @@
 
 namespace App\Entities\Models;
 
+use App\Entities\Relations\CategoryRelations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Entities\Relations\CategoryRelations;
+
 class Category extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
-    use HasFactory, CategoryRelations;
+    use CategoryRelations, HasFactory;
+
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
     protected $casts = [
         'name' => 'string',
         'description' => 'string',
     ];
-
 }

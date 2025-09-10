@@ -24,7 +24,6 @@ class CreateUserData
         );
     }
 
-
     public function toArray(): array
     {
         return [
@@ -34,5 +33,4 @@ class CreateUserData
             'role' => $this->role->value,
         ];
     }
-
 }

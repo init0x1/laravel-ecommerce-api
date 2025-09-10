@@ -2,18 +2,18 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\BaseRepository\BaseRepository;
-use App\Repositories\Contracts\StockRepositoryInterface;
 use App\DTOs\Stocks\CreateStockData;
 use App\DTOs\Stocks\UpdateStockData;
 use App\Entities\Models\Stock;
-
+use App\Repositories\BaseRepository\BaseRepository;
+use App\Repositories\Contracts\StockRepositoryInterface;
 
 class StockRepository extends BaseRepository implements StockRepositoryInterface
 {
     protected $allowedIncludes = [
         'product',
     ];
+
     protected $allowedFilters = [];
 
     protected $allowedFiltersExact = [
@@ -52,17 +52,16 @@ class StockRepository extends BaseRepository implements StockRepositoryInterface
         return $this->model->create($data->toArray());
     }
 
-
     public function findById(int $id): ?Stock
     {
         return $this->model->find($id);
     }
 
-
     public function update(UpdateStockData $data): Stock
     {
         $stock = $this->model->findOrFail($data->id);
         $stock->update($data->toArray());
+
         return $stock;
     }
 

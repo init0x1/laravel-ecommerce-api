@@ -2,9 +2,10 @@
 
 namespace App\Entities\Models;
 
+use App\Entities\Relations\StockRelations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Entities\Relations\StockRelations;
+
 class Stock extends Model
 {
     /** @use HasFactory<\Database\Factories\StockFactory> */
@@ -19,5 +20,4 @@ class Stock extends Model
         'product_id' => 'integer',
         'quantity' => 'integer',
     ];
-
 }

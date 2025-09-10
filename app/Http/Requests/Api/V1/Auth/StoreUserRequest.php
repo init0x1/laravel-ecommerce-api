@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Api\V1\Auth;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Entities\Enums\UserType;
+use Illuminate\Foundation\Http\FormRequest;
+
 class StoreUserRequest extends FormRequest
 {
     /**
@@ -25,7 +26,7 @@ class StoreUserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:' . implode(',', array_column(UserType::cases(), 'value'))
+            'role' => 'required|string|in:'.implode(',', array_column(UserType::cases(), 'value')),
         ];
     }
 
@@ -44,7 +45,7 @@ class StoreUserRequest extends FormRequest
             'password.confirmed' => 'The password confirmation does not match.',
             'role.required' => 'The role field is required.',
             'role.string' => 'The role must be a string.',
-            'role.in' => 'The selected role is invalid. Allowed roles are: ' . implode(', ', array_column(UserType::cases(), 'value')),
+            'role.in' => 'The selected role is invalid. Allowed roles are: '.implode(', ', array_column(UserType::cases(), 'value')),
         ];
     }
 }

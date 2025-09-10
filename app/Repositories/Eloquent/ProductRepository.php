@@ -2,19 +2,18 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\BaseRepository\BaseRepository;
-use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\DTOs\Products\CreateProductData;
 use App\DTOs\Products\UpdateProductData;
 use App\Entities\Models\Product;
-use Illuminate\Pagination\LengthAwarePaginator;
+use App\Repositories\BaseRepository\BaseRepository;
+use App\Repositories\Contracts\ProductRepositoryInterface;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
-
     protected $allowedIncludes = [
         'stock',
     ];
+
     protected $allowedFilters = [
         'name',
         'description',
@@ -58,7 +57,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return $this->model->create($data->toArray());
     }
 
-
     public function findById(int $id): ?Product
     {
         return $this->model->find($id);
@@ -68,6 +66,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         $product = $this->model->findOrFail($data->id);
         $product->update($data->toArray());
+
         return $product;
     }
 

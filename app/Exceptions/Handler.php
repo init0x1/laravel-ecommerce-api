@@ -10,7 +10,6 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-
 class Handler extends ExceptionHandler
 {
     use ApiResponse;
@@ -25,7 +24,6 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
-
 
     /**
      * Register the exception handling callbacks for the application.

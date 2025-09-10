@@ -21,10 +21,13 @@ Route::name('categories.')
     ->prefix('categories')
     ->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('index');
-        Route::post('/', [CategoryController::class, 'store'])->name('store');
         Route::get('/{id}', [CategoryController::class, 'show'])->name('show');
-        Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
-        Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
+
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/', [CategoryController::class, 'store'])->name('store');
+            Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
+            Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
+        });
     });
 
 // Product Routes

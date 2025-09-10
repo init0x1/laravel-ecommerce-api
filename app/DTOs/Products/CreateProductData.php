@@ -4,7 +4,6 @@ namespace App\DTOs\Products;
 
 use Illuminate\Http\Request;
 
-
 class CreateProductData
 {
     public function __construct(
