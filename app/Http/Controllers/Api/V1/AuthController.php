@@ -2,67 +2,38 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Entities\Models\User;
+use App\DTOs\Users\CreateUserData;
+use App\DTOs\Users\LoginUserData;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\Api\V1\Auth\StoreUserRequest;
 use App\Http\Requests\Api\V1\Auth\LoginUserRequest;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use App\Services\AuthService;
+use Illuminate\Auth\AuthenticationException;
 
 
 class AuthController extends BaseApiController
 {
-    public function register(StoreUserRequest $request)
+    protected $authService;
+
+    public function __construct(AuthService $authService)
     {
-        $newUserData = $request->validated();
-
-        $newUser = User::create([
-            'name' => $newUserData['name'],
-            'email' => $newUserData['email'],
-            'password' => Hash::make($newUserData['password']),
-            'role' => $newUserData['role'],
-        ]);
-
-        $token = $newUser->createToken('auth_token')->plainTextToken;
-
-        return $this->jsonResponse(
-            [
-                'user' => $newUser,
-                'token' => $token,
-            ],
-            'User registered successfully.',
-            true,
-            201
-        );
+        $this->authService = $authService;
     }
 
+    public function register(StoreUserRequest $request)
+    {
+        $user = $this->authService->register(CreateUserData::fromRequest($request));
+
+        return $this->createdResponse($user);
+    }
 
     public function login(LoginUserRequest $request)
     {
-        $request->validated($request->all());
-        $credentials = $request->only('email', 'password');
-
-        if (!Auth::attempt($credentials)) {
-            return $this->jsonResponse(
-                null,
-                'Invalid credentials',
-                false,
-                401
-            );
+        try {
+            $result = $this->authService->login(LoginUserData::fromRequest($request));
+            return $this->successResponse($result);
+        } catch (AuthenticationException $e) {
+            return $this->errorResponse($e->getMessage(), 401);
         }
-
-        $user = User::firstWhere('email', $request->email);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return $this->jsonResponse(
-            [
-                'user' => $user,
-                'token' => $token,
-            ],
-            'User logged in successfully.',
-            true,
-            200
-        );
     }
 }
