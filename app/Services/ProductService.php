@@ -8,6 +8,7 @@ use App\DTOs\Stocks\CreateStockData;
 use App\Entities\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\Contracts\StockRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
@@ -47,7 +48,11 @@ class ProductService
 
     public function getProductById(int $id): ?Product
     {
-        return $this->productRepository->findById($id);
+        $product = $this->productRepository->findById($id);
+        if(!$product){
+            throw new ModelNotFoundException("Product with ID {$id} not found");
+        }
+        return $product;
     }
 
     public function updateProduct(UpdateProductData $productData): Product

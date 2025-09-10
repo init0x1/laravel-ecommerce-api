@@ -40,21 +40,19 @@ class ProductController extends BaseApiController
 
     public function show(int $id): JsonResponse
     {
-
-        $product = $this->productService->getProductById($id);
-        if (!$product) {
-            return $this->notFoundResponse('Product not found');
+        try {
+            $product = $this->productService->getProductById($id);
+            $product->load('stock');
+            return $this->successResponse($product);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFoundResponse($e->getMessage());
         }
-
-        $product->load('stock');
-
-        return $this->successResponse($product);
     }
 
 
     public function update(ProductUpdateRequest $request): JsonResponse
     {
-        try{
+        try {
             $data = UpdateProductData::fromRequest($request);
             $updatedProduct = $this->productService->updateProduct($data);
             $updatedProduct->load('stock');
@@ -62,13 +60,11 @@ class ProductController extends BaseApiController
         } catch (ModelNotFoundException $e) {
             return $this->notFoundResponse('Product not found to be updated');
         }
-
     }
 
 
     public function destroy(Product $product): JsonResponse
     {
-
         $deleted = $this->productService->deleteProduct($product);
 
         if (!$deleted) {

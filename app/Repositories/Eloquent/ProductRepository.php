@@ -59,7 +59,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     }
 
 
-    public function findById(int $id): Product
+    public function findById(int $id): ?Product
     {
         return $this->model->find($id);
     }
