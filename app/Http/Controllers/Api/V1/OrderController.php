@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\Api\V1\CreateRequests\OrderCreateRequest;
 use App\Http\Requests\Api\V1\UpdateRequests\OrderUpdateRequest;
 use App\Services\OrderService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -47,6 +48,8 @@ class OrderController extends BaseApiController
             return $this->errorResponse($e->errors(), 422);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 400);
+        }catch(AuthorizationException $e) {
+            return $this->forbiddenResponse($e->getMessage());
         }
     }
 
@@ -84,6 +87,8 @@ class OrderController extends BaseApiController
             return $this->errorResponse($e->errors(), 422);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 403);
+        }catch(AuthorizationException $e) {
+            return $this->forbiddenResponse($e->getMessage());
         }
     }
 }

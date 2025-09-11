@@ -12,13 +12,17 @@ use App\Repositories\Contracts\OrderItemRepositoryInterface;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\Contracts\StockRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use App\Policies\V1\OrderPolicy;
 
-class OrderService
+class OrderService extends BaseService
 {
+
+     protected $policyClass = OrderPolicy::class;
     public function __construct(
         protected OrderRepositoryInterface $orderRepository,
         protected OrderItemRepositoryInterface $orderItemRepository,
@@ -28,6 +32,10 @@ class OrderService
 
     public function createOrder(CreateOrderData $orderData): Order
     {
+        if (! $this->isAble('store', Order::class)) {
+            throw new AuthorizationException('You do not have permission to create an order.');
+        }
+
         return DB::transaction(function () use ($orderData) {
 
             // validate products
@@ -107,22 +115,9 @@ class OrderService
 
     public function updateOrder(Order $order, UpdateOrderData $updateData, int $userId, UserType $userRole): Order
     {
-        // Authorization logic
-        if ($userRole === UserType::CUSTOMER) {
-
-            if ($order->customer_id !== $userId) {
-                throw new \Exception('Unauthorized: You can only update your own orders');
-            }
-
-            if ($updateData->status && $updateData->status !== OrderStatus::CANCELLED) {
-                throw new \Exception('Customers can only cancel orders');
-            }
-
-            if ($updateData->status === OrderStatus::CANCELLED && $order->status !== OrderStatus::PENDING) {
-                throw new \Exception('You can only cancel pending orders');
-            }
+        if(!$this->isAble('update', Order::class)){
+            throw new AuthorizationException('You do not have permission to update this order data');
         }
-
         // incase of cancelling order, restore stock quantities
         if ($updateData->status === OrderStatus::CANCELLED && $order->status !== OrderStatus::CANCELLED) {
             $this->restoreStockQuantities($order);

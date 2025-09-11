@@ -30,6 +30,13 @@ final class Abilities
 
     public const DeleteProduct = 'product:delete';
 
+    // Order abilities
+    public const CreateOrder = 'order:create';
+
+    public const UpdateOrder = 'order:update';
+
+    public const DeleteOrder = 'order:delete';
+
     /**
      * Get all abilities for a specific user based on their role
      */
@@ -53,6 +60,10 @@ final class Abilities
                 self::CreateProduct,
                 self::UpdateProduct,
                 self::DeleteProduct,
+
+                // Order abilities - Admin manages orders
+                self::UpdateOrder,
+                self::DeleteOrder,
             ],
 
             UserType::SELLER => [
@@ -61,10 +72,16 @@ final class Abilities
                 self::UpdateProduct,
                 self::DeleteProduct,
 
+                // Order abilities - Seller manages orders
+                self::UpdateOrder,
+                self::DeleteOrder,
+
             ],
 
             UserType::CUSTOMER => [
 
+                // Order abilites
+                self::CreateOrder
             ],
         };
     }
