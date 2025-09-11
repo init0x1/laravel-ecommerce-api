@@ -1,61 +1,399 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel E-commerce API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, secure e-commerce REST API built with Laravel 12, featuring role-based access control, comprehensive product management, and order processing capabilities.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **User Management**: Role-based authentication with Admin, Seller, and Customer roles
+- **Product Management**: Full CRUD operations for products with stock tracking
+- **Category Management**: Organize products with categories
+- **Order Processing**: Complete order workflow with order items and status tracking
+- **Stock Management**: Real-time inventory tracking
+- **Security**: Laravel Sanctum token-based authentication with role-specific abilities
+- **API Versioning**: Structured v1 API endpoints
+- **Data Validation**: Comprehensive request validation and error handling
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠 Technology Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Framework**: Laravel 12.28.1
+- **PHP**: 8.4.1
+- **Database**: MySQL
+- **Authentication**: Laravel Sanctum 4.2.0
+- **Testing**: PHPUnit 11.5.36
+- **Code Style**: Laravel Pint 1.24.0
+- **Additional Packages**: Spatie Query Builder
 
-## Learning Laravel
+## 📋 Prerequisites
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Before you begin, ensure you have the following installed:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP >= 8.2
+- Composer
+- MySQL
+- Node.js & NPM (for frontend assets)
+- Git
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🔧 Installation & Setup
 
-## Laravel Sponsors
+### 1. Clone the Repository
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+git clone https://github.com/init0x1/laravel-ecommerce-api.git
+cd laravel-ecommerce-api
+```
 
-### Premium Partners
+### 2. Install Dependencies
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+composer install
+npm install
+```
 
-## Contributing
+### 3. Environment Configuration
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# Copy environment file
+cp .env.example .env
 
-## Code of Conduct
+# Generate application key
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Configure Database
 
-## Security Vulnerabilities
+Edit your `.env` file with your database credentials:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel_ecommerce_api
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
 
-## License
+### 5. Run Migrations & Seeders
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+# Create database tables
+php artisan migrate
+
+# Seed the database (optional)
+php artisan db:seed
+```
+
+### 6. Clear & Optimize Application
+
+```bash
+# Clear and optimize cache
+php artisan optimize:clear
+php artisan optimize
+```
+
+### 7. Start the Development Server
+
+```bash
+# Start Laravel development server
+php artisan serve
+
+# Server will run at: http://127.0.0.1:8000
+```
+
+## 🏗 Architecture Overview
+
+The application follows a clean architecture pattern with:
+
+### Directory Structure
+
+```
+app/
+├── DTOs/                 # Data Transfer Objects
+│   ├── Categories/
+│   ├── Orders/
+│   ├── Products/
+│   ├── Stocks/
+│   └── Users/
+├── Entities/
+│   ├── Enums/           # Application enums (UserType, OrderStatus)
+│   ├── Models/          # Eloquent models
+│   └── Relations/       # Model relationships
+├── Http/
+│   ├── Controllers/     # API controllers
+│   └── Requests/        # Form request validation
+├── Policies/            # Authorization policies
+├── Repositories/        # Repository pattern implementation
+├── Services/            # Business logic layer
+└── Traits/              # Reusable traits
+```
+
+### Key Design Patterns
+
+- **Repository Pattern**: Abstraction layer for data access
+- **Service Layer**: Business logic encapsulation
+- **DTO Pattern**: Type-safe data transfer
+- **Policy-based Authorization**: Role and ability-based access control
+
+## 🔐 Authentication & Authorization
+
+### User Roles
+
+- **Admin**: Full system access (categories, products, users, orders, stock)
+- **Seller**: Product and inventory management
+- **Customer**: Order creation and viewing
+
+### Authentication Flow
+
+1. **Register/Login**: Obtain an access token
+2. **Include Token**: Add `Authorization: Bearer {token}` header to requests
+3. **Role Validation**: Each endpoint validates user permissions
+
+### Example Authentication
+
+```bash
+# Register a new user
+curl -X POST http://127.0.0.1:8000/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "name": "Abdelrahman Ali",
+    "email": "admin@init0x1.com",
+    "password": "password123",
+    "password_confirmation": "password123",
+    "role": "admin"
+  }'
+
+# Login
+curl -X POST http://127.0.0.1:8000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "email": "admin@init0x1.com",
+    "password": "password123"
+  }'
+```
+
+## 📚 API Documentation
+
+### Base URL
+```
+http://127.0.0.1:8000/api/v1
+```
+
+### Authentication Routes
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| POST | `/auth/register` | Register new user | Public |
+| POST | `/auth/login` | User login | Public |
+
+### Category Routes
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| GET | `/categories` | List all categories | Public |
+| GET | `/categories/{id}` | Get category by ID | Public |
+| POST | `/categories` | Create category | Admin |
+| PUT | `/categories/{id}` | Update category | Admin |
+| DELETE | `/categories/{id}` | Delete category | Admin |
+
+### Product Routes
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| GET | `/products` | List all products | Public |
+| GET | `/products/{id}` | Get product by ID | Public |
+| POST | `/products` | Create product | Admin/Seller |
+| PUT | `/products/{id}` | Update product | Admin/Seller |
+| DELETE | `/products/{id}` | Delete product | Admin/Seller |
+
+### Order Routes
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| GET | `/orders` | List user orders | Authenticated |
+| GET | `/orders/{id}` | Get order details | Authenticated |
+| POST | `/orders` | Create new order | Customer |
+| PUT | `/orders/{id}` | Update order | Admin/Seller |
+
+### Stock Routes
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| GET | `/stocks` | List all stock | Public |
+| GET | `/stocks/{id}` | Get stock by ID | Public |
+| PUT | `/stocks/{id}` | Update stock quantity | Admin/Seller |
+
+## 💡 API Usage Examples
+
+### Create a Product (Admin/Seller)
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/products \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer {your-token}" \
+  -d '{
+    "name": "Laptop Pro",
+    "description": "High-performance laptop",
+    "unit_price": 1299.99,
+    "category_id": 1,
+    "initial_quantity": 10
+  }'
+```
+
+### Create an Order (Customer)
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/orders \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer {customer-token}" \
+  -d '{
+    "shipping_address": "123 Main St, City, State 12345",
+    "products": [
+      {
+        "product_id": 1,
+        "quantity": 2
+      },
+      {
+        "product_id": 2,
+        "quantity": 1
+      }
+    ]
+  }'
+```
+
+### Update Stock (Admin/Seller)
+
+```bash
+curl -X PUT http://127.0.0.1:8000/api/v1/stocks/1 \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer {admin-token}" \
+  -d '{
+    "quantity": 50
+  }'
+```
+
+## 🗃 Database Schema
+
+### Core Tables
+
+- **users**: User accounts with roles (admin, seller, customer)
+- **categories**: Product categories
+- **products**: Product catalog with pricing and seller info
+- **stocks**: Inventory tracking per product
+- **orders**: Customer orders with status and shipping
+- **order_items**: Individual items within orders
+- **personal_access_tokens**: Sanctum authentication tokens
+
+### Relationships
+
+- Products belong to categories and sellers
+- Orders belong to customers (users)
+- Order items link orders to products
+- Stocks have one-to-one relationship with products
+
+## 🧪 Testing
+
+### Run Tests
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test file
+php artisan test tests/Feature/ProductTest.php
+
+# Run with coverage
+php artisan test --coverage
+```
+
+### Test Structure
+
+- **Feature Tests**: API endpoint testing
+- **Unit Tests**: Service and repository testing
+- **Database**: Factory-based test data generation
+
+## 🔍 Development Tools
+
+### Code Quality
+
+```bash
+# Format code with Pint
+vendor/bin/pint
+
+# Check code style
+vendor/bin/pint --test
+```
+
+### Debugging
+
+```bash
+# View application logs
+tail -f storage/logs/laravel.log
+
+# Use Tinker for interactive debugging
+php artisan tinker
+```
+
+### Cache Management
+
+```bash
+# Clear all caches
+php artisan optimize:clear
+
+# Cache configuration
+php artisan optimize
+```
+
+## 🚦 Error Handling
+
+The API returns consistent JSON responses:
+
+### Success Response Format
+```json
+{
+  "data": {
+    // Response data
+  }
+}
+```
+
+### Error Response Format
+```json
+{
+  "message": "Error description",
+  "errors": {
+    "field": ["Validation error message"]
+  }
+}
+```
+
+### HTTP Status Codes
+
+- **200**: Success
+- **201**: Created
+- **400**: Bad Request
+- **401**: Unauthorized
+- **403**: Forbidden
+- **404**: Not Found
+- **422**: Validation Error
+- **500**: Server Error
+
+## 🔒 Security Features
+
+- **Token-based Authentication**: Secure API access with Laravel Sanctum
+- **Role-based Authorization**: Fine-grained permissions per user role
+- **Input Validation**: Comprehensive request validation
+- **SQL Injection Protection**: Eloquent ORM with prepared statements
+- **CORS Protection**: Configurable cross-origin requests
+- **Rate Limiting**: Built-in request throttling
+
+## 📊 Performance Considerations
+
+- **Database Indexing**: Optimized queries with proper indexes
+- **Eager Loading**: Prevent N+1 query problems
+- **Caching**: Laravel's built-in cache system
+- **Query Optimization**: Efficient repository patterns
+
