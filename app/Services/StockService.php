@@ -6,12 +6,15 @@ use App\DTOs\Stocks\CreateStockData;
 use App\DTOs\Stocks\UpdateStockData;
 use App\Entities\Models\Stock;
 use App\Repositories\Contracts\StockRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Pagination\LengthAwarePaginator;
-
-class StockService
+use App\Policies\V1\StockPolicy;
+class StockService extends BaseService
 {
+
     protected $stockRepository;
 
+    protected $policyClass = StockPolicy::class;
     public function __construct(StockRepositoryInterface $stockRepository)
     {
         $this->stockRepository = $stockRepository;
@@ -36,6 +39,9 @@ class StockService
 
     public function updateStock(UpdateStockData $stockData): Stock
     {
+        if (! $this->isAble('update', Stock::class)) {
+            throw new AuthorizationException('You do not have permission to update stock.');
+        }
         return $this->stockRepository->update($stockData);
     }
 

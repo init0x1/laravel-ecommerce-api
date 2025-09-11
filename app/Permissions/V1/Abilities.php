@@ -37,6 +37,9 @@ final class Abilities
 
     public const DeleteOrder = 'order:delete';
 
+    // Stock abilities
+    public const UpdateStock = 'stock:update';
+
     /**
      * Get all abilities for a specific user based on their role
      */
@@ -64,6 +67,9 @@ final class Abilities
                 // Order abilities - Admin manages orders
                 self::UpdateOrder,
                 self::DeleteOrder,
+
+                // Stock abilities - Admin manages stock
+                self::UpdateStock,
             ],
 
             UserType::SELLER => [
@@ -76,6 +82,8 @@ final class Abilities
                 self::UpdateOrder,
                 self::DeleteOrder,
 
+                // Stock abilities - Seller manages stock
+                self::UpdateStock,
             ],
 
             UserType::CUSTOMER => [

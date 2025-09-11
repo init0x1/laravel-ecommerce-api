@@ -7,6 +7,8 @@ use App\Entities\Models\Stock;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\Api\V1\UpdateRequests\StockUpdateRequest;
 use App\Services\StockService;
+use Author;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
 class StockController extends BaseApiController
@@ -40,11 +42,16 @@ class StockController extends BaseApiController
 
     public function update(StockUpdateRequest $request, Stock $stock): JsonResponse
     {
-        $data = UpdateStockData::fromRequest($request);
-        $updatedStock = $this->stockService->updateStock($data);
+        try{
+            $data = UpdateStockData::fromRequest($request);
+            $updatedStock = $this->stockService->updateStock($data);
 
-        $updatedStock->load('product');
+            $updatedStock->load('product');
 
-        return $this->successResponse($updatedStock);
+            return $this->successResponse($updatedStock);
+        } catch (AuthorizationException $e) {
+            return $this->forbiddenResponse($e->getMessage());
+        }
+
     }
 }
