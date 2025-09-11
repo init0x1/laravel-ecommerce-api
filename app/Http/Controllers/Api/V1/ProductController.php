@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\Api\V1\CreateRequests\ProductCreateRequest;
 use App\Http\Requests\Api\V1\UpdateRequests\ProductUpdateRequest;
 use App\Services\ProductService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
@@ -30,10 +31,16 @@ class ProductController extends BaseApiController
 
     public function store(ProductCreateRequest $request): JsonResponse
     {
-        $product = $this->productService->createProduct(CreateProductData::fromRequest($request));
-        $product->load('stock');
+        try {
 
-        return $this->createdResponse($product);
+            $product = $this->productService->createProduct(CreateProductData::fromRequest($request));
+            $product->load('stock');
+
+            return $this->createdResponse($product);
+        } catch (AuthorizationException $e) {
+            return $this->forbiddenResponse($e->getMessage());
+        }
+
     }
 
     public function show(int $id): JsonResponse
@@ -58,17 +65,24 @@ class ProductController extends BaseApiController
             return $this->successResponse($updatedProduct);
         } catch (ModelNotFoundException $e) {
             return $this->notFoundResponse('Product not found to be updated');
+        } catch (AuthorizationException $e) {
+            return $this->forbiddenResponse($e->getMessage());
         }
     }
 
     public function destroy(Product $product): JsonResponse
     {
-        $deleted = $this->productService->deleteProduct($product);
+        try {
+            $deleted = $this->productService->deleteProduct($product);
 
-        if (! $deleted) {
-            return $this->errorResponse('Failed to delete product', 500);
+            if (! $deleted) {
+                return $this->errorResponse('Failed to delete product', 500);
+            }
+
+            return $this->noContentResponse();
+        } catch (AuthorizationException $e) {
+            return $this->forbiddenResponse($e->getMessage());
+
         }
-
-        return $this->noContentResponse();
     }
 }

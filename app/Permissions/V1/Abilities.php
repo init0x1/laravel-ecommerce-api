@@ -23,6 +23,13 @@ final class Abilities
 
     public const ViewAllUsers = 'user:view:all';
 
+    //  Product abilities
+    public const CreateProduct = 'product:create';
+
+    public const UpdateProduct = 'product:update';
+
+    public const DeleteProduct = 'product:delete';
+
     /**
      * Get all abilities for a specific user based on their role
      */
@@ -41,9 +48,18 @@ final class Abilities
                 self::UpdateUser,
                 self::DeleteUser,
                 self::ViewAllUsers,
+
+                // Product abilities - Admin manages products
+                self::CreateProduct,
+                self::UpdateProduct,
+                self::DeleteProduct,
             ],
 
             UserType::SELLER => [
+                // Product abilities - Seller manages products
+                self::CreateProduct,
+                self::UpdateProduct,
+                self::DeleteProduct,
 
             ],
 
